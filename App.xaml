@@ -1,0 +1,70 @@
+<Application x:Class="SimGamepad.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Glassmorphism: highly transparent so blur is visible -->
+            <Color x:Key="GlassFillStart">#35FFFFFF</Color>
+            <Color x:Key="GlassFillEnd">#12FFFFFF</Color>
+            <Color x:Key="GlassBorder">#22FFFFFF</Color>
+            <Color x:Key="PanelFillStart">#30FFFFFF</Color>
+            <Color x:Key="PanelFillEnd">#10FFFFFF</Color>
+            <Color x:Key="GlassBgOverlay">#350D0D12</Color>
+            <Color x:Key="AccentWifi">#00E5A0</Color>
+            <Color x:Key="AccentBluetooth">#5FC9FF</Color>
+            <Color x:Key="AccentUsb">#FFB74D</Color>
+            <Color x:Key="TextPrimary">#F5F5F5</Color>
+            <Color x:Key="TextSecondary">#9E9E9E</Color>
+            <Color x:Key="BgDark">#0D0D12</Color>
+
+            <LinearGradientBrush x:Key="GlassPanelBrush" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="{StaticResource PanelFillStart}" Offset="0"/>
+                <GradientStop Color="{StaticResource PanelFillEnd}" Offset="1"/>
+            </LinearGradientBrush>
+
+            <LinearGradientBrush x:Key="GlassCardBrush" StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="{StaticResource GlassFillStart}" Offset="0"/>
+                <GradientStop Color="{StaticResource GlassFillEnd}" Offset="1"/>
+            </LinearGradientBrush>
+
+            <SolidColorBrush x:Key="GlassBorderBrush" Color="{StaticResource GlassBorder}"/>
+            <SolidColorBrush x:Key="GlassBgOverlayBrush" Color="{StaticResource GlassBgOverlay}"/>
+            <SolidColorBrush x:Key="AccentWifiBrush" Color="{StaticResource AccentWifi}"/>
+            <SolidColorBrush x:Key="AccentBluetoothBrush" Color="{StaticResource AccentBluetooth}"/>
+            <SolidColorBrush x:Key="AccentUsbBrush" Color="{StaticResource AccentUsb}"/>
+            <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}"/>
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}"/>
+            <SolidColorBrush x:Key="BgDarkBrush" Color="{StaticResource BgDark}"/>
+
+            <!-- macOS traffic light colors -->
+            <SolidColorBrush x:Key="MacCloseBrush" Color="#FF5F57"/>
+            <SolidColorBrush x:Key="MacMinimizeBrush" Color="#FEBC2E"/>
+            <SolidColorBrush x:Key="MacMaximizeBrush" Color="#28C840"/>
+            <!-- Title bar: macOS-style circular buttons (small) -->
+            <Style x:Key="MacTrafficLightButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Width" Value="20"/>
+                <Setter Property="Height" Value="20"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bd" Width="12" Height="12" CornerRadius="6"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
