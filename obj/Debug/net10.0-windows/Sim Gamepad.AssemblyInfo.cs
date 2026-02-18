@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sim Gamepad")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ed68b0d97c228d3f4c11e53fefaf7f3f36bb663")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d0733f4f0775b019a5a55cc3a14be8224a70a3f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sim Gamepad")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sim Gamepad")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

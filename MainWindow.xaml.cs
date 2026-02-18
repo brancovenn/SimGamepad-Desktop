@@ -57,7 +57,7 @@ namespace SimGamepad
             UsbInfoVisibility = Visibility.Collapsed;
         }
 
-        private void Wifi_Click(object sender, MouseButtonEventArgs e)
+        private void Wifi_Click(object sender, RoutedEventArgs e)
         {
             StopAll();
 
@@ -79,7 +79,7 @@ namespace SimGamepad
             RaiseAll();
         }
 
-        private void Bluetooth_Click(object sender, MouseButtonEventArgs e)
+        private void Bluetooth_Click(object sender, RoutedEventArgs e)
         {
             StopAll();
 
@@ -101,7 +101,7 @@ namespace SimGamepad
             RaiseAll();
         }
 
-        private void Usb_Click(object sender, MouseButtonEventArgs e)
+        private void Usb_Click(object sender, RoutedEventArgs e)
         {
             StopAll();
 
@@ -124,18 +124,33 @@ namespace SimGamepad
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            GlassWindowHelper.EnableBlur(this);
+            // Apply Modern Backdrop
+            WindowBackdrop.ApplyBackdrop(this, WindowBackdrop.BackdropType.Acrylic); 
         }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
-            UpdateMaximizeIcon();
+             // No-op for now
         }
 
         private void UpdateMaximizeIcon()
         {
             if (BtnMaximize == null) return;
             BtnMaximize.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+        }
+
+        // Maximizing logic might change with WindowChrome, but standard checks are okay.
+        private void BrancoVenn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = "https://brancovenn.com",
+                    UseShellExecute = true
+                });
+            }
+            catch { }
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)

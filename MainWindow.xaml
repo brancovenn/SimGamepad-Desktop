@@ -1,377 +1,293 @@
 <Window x:Class="SimGamepad.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SimGamepad"
-        Width="520"
-        Height="600"
-        ResizeMode="NoResize"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Sim Gamepad"
+        Width="800" Height="550"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen"
-        Background="Transparent"
         WindowStyle="None"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        Background="Transparent">
 
-    <!-- Root: semi-transparent so blur shows through (glassmorphism) -->
-    <Border Background="{StaticResource GlassBgOverlayBrush}"
-            CornerRadius="24"
-            BorderThickness="1"
-            BorderBrush="{StaticResource GlassBorderBrush}"
-            Margin="0">
-        <Border.Effect>
-            <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.4" Color="Black"/>
-        </Border.Effect>
+    <Window.Resources>
+        <!-- COLORS (DARK GLASS THEME) -->
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#E6050505"/>
+        <SolidColorBrush x:Key="SidebarBrush" Color="#20FFFFFF"/>
+        <SolidColorBrush x:Key="CardBrush" Color="#15FFFFFF"/>
+        <SolidColorBrush x:Key="CardHoverBrush" Color="#25FFFFFF"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#AAAAAA"/>
+        
+        <Color x:Key="AccentColor">#00E5FF</Color>
+        <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
+        
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#15FFFFFF"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <Grid Margin="24">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}">
+                            <Path x:Name="icon" Data="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                                  Fill="{TemplateBinding Foreground}" 
+                                  Width="10" Height="10" Stretch="Uniform"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  SnapsToDevicePixels="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#20FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#30FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <!-- TITLE BAR - glass, macOS traffic lights left + drag -->
-            <Border Grid.Row="0"
-                    Background="{StaticResource GlassCardBrush}"
-                    CornerRadius="18,18,0,0"
-                    Padding="14,8"
-                    Margin="-24,-24,-24,0"
-                    BorderThickness="1,1,1,0"
-                    BorderBrush="{StaticResource GlassBorderBrush}">
-                <Grid>
-                    <Border Background="Transparent"
-                            MouseLeftButtonDown="Window_MouseLeftButtonDown"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"/>
-                    <!-- macOS-style: Close, Minimize, Maximize (left, small circles) -->
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2,0,0,0">
-                        <Button x:Name="BtnClose" Click="Close_Click" Style="{StaticResource MacTrafficLightButtonStyle}"
-                                ToolTip="Close" Background="{StaticResource MacCloseBrush}" Margin="0,0,6,0"/>
-                        <Button x:Name="BtnMinimize" Click="Minimize_Click" Style="{StaticResource MacTrafficLightButtonStyle}"
-                                ToolTip="Minimize" Background="{StaticResource MacMinimizeBrush}" Margin="0,0,6,0"/>
-                        <Button x:Name="BtnMaximize" Click="Maximize_Click" Style="{StaticResource MacTrafficLightButtonStyle}"
-                                ToolTip="Maximize" Background="{StaticResource MacMaximizeBrush}"/>
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}">
+                            <Path x:Name="icon" Data="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" 
+                                  Fill="{TemplateBinding Foreground}" 
+                                  Width="10" Height="10" Stretch="Uniform"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  SnapsToDevicePixels="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E81123"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#CC8B0000"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    
+    <!-- Main Window Border -->
+    <Border Background="{StaticResource AppBackgroundBrush}" 
+            BorderBrush="#40FFFFFF" 
+            BorderThickness="1" 
+            CornerRadius="8">
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SIDEBAR -->
+            <Border Grid.Column="0" Background="{StaticResource SidebarBrush}" CornerRadius="8,0,0,8" BorderThickness="0,0,1,0" BorderBrush="#20FFFFFF">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- App Title -->
+                    <StackPanel Grid.Row="0" Margin="10,20,0,30">
+                        <TextBlock Text="SIM" FontSize="12" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                        <TextBlock Text="GAMEPAD" FontSize="20" FontWeight="Heavy" Foreground="{StaticResource TextPrimary}" Margin="0,-4,0,0"/>
                     </StackPanel>
+
+                    <!-- Nav Menu -->
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Text="CONNECTION" FontSize="10" Foreground="{StaticResource TextSecondary}" FontWeight="Bold" Margin="10,0,0,10"/>
+                        
+                        <Button Click="Wifi_Click" Style="{StaticResource NavButtonStyle}" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="M12.01 21.49L23.64 7c-.45-.34-4.93-4-11.64-4C5.28 3 .81 6.66.36 7l11.63 14.49.01.01.01-.01z" 
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" 
+                                      Width="16" Height="14" Stretch="Uniform" Margin="0,0,12,0"/>
+                                <TextBlock Text="Wi-Fi"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Bluetooth_Click" Style="{StaticResource NavButtonStyle}" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71L13.41 12L17.71 7.71z M13 5.83 l1.88 1.88L13 9.59V5.83z M13 18.17v-3.76l1.88 1.88L13 18.17z" 
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" 
+                                      Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0"/>
+                                <TextBlock Text="Bluetooth"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Usb_Click" Style="{StaticResource NavButtonStyle}" Margin="0,2">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="M6 2h8v5c0 1.1-.9 2-2 2h-4c-1.1 0-2-.9-2-2V2zM4 10h12c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V12c0-1.1.9-2 2-2z" 
+                                      Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" 
+                                      Width="16" Height="14" Stretch="Uniform" Margin="0,0,12,0"/>
+                                <TextBlock Text="USB"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Status Indicator -->
+                    <Border Grid.Row="2" Background="#10FFFFFF" CornerRadius="12" Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="STATUS" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="{Binding StatusText}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Border>
 
-            <!-- TOP STATUS BAR - glass panel + draggable -->
-            <Border Grid.Row="1"
-                    Background="{StaticResource GlassCardBrush}"
-                    CornerRadius="18"
-                    Padding="20,16"
-                    Margin="0,0,0,20"
-                    BorderThickness="1"
-                    BorderBrush="{StaticResource GlassBorderBrush}"
-                    MouseLeftButtonDown="Window_MouseLeftButtonDown">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.15" Color="Black"/>
-                </Border.Effect>
+            <!-- CONTENT AREA -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/> <!-- Custom TitleBar -->
+                    <RowDefinition Height="Auto"/> <!-- Header -->
+                    <RowDefinition Height="*"/> <!-- Main -->
+                </Grid.RowDefinitions>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel>
-                        <TextBlock Text="Connection Mode"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"/>
-                        <TextBlock Text="{Binding ActiveModeText}"
-                                   Foreground="{StaticResource AccentWifiBrush}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Margin="0,2,0,0"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                        <TextBlock Text="Status"
-                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                   FontSize="12"
-                                   FontWeight="SemiBold"/>
-                        <TextBlock Text="{Binding StatusText}"
-                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Margin="0,2,0,0"/>
+                <!-- Custom Title Bar -->
+                <Grid Grid.Row="0" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Button x:Name="BtnMinimize" Click="Minimize_Click" Style="{StaticResource CaptionButtonStyle}" Content="M0,14 L10,14 L10,16 L0,16 Z"/>
+                        <Button x:Name="BtnMaximize" Click="Maximize_Click" Style="{StaticResource CaptionButtonStyle}" Content="M1,1 L9,1 L9,9 L1,9 Z M0,0 L10,0 L10,10 L0,10 Z"/>
+                        <Button x:Name="BtnClose" Click="Close_Click" Style="{StaticResource CloseButtonStyle}" Content="M0.7,0 L5,4.3 L9.3,0 L10,0.7 L5.7,5 L10,9.3 L9.3,10 L5,5.7 L0.7,10 L0,9.3 L4.3,5 L0,0.7 Z"/>
                     </StackPanel>
                 </Grid>
-            </Border>
 
-            <!-- MODE BUTTONS - glass cards -->
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,24">
+                <!-- Dynamic Header -->
+                <StackPanel Grid.Row="1" Margin="30,10,30,20">
+                    <TextBlock Text="{Binding ActiveModeText}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource TextPrimary}">
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="15" ShadowDepth="0" Opacity="0.5" Color="#00E5FF"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock Text="Connect your device to start" FontSize="14" Foreground="{StaticResource TextSecondary}"/>
+                </StackPanel>
 
-                <!-- WIFI -->
-                <Border Width="96" Height="96"
-                        Background="{StaticResource GlassCardBrush}"
-                        CornerRadius="24"
-                        Margin="8"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource GlassBorderBrush}"
-                        MouseLeftButtonDown="Wifi_Click"
-                        Cursor="Hand">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="24" ShadowDepth="0" Color="#00E5A0" Opacity="{Binding WifiGlowOpacity}"/>
-                    </Border.Effect>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Viewbox Width="36" Height="36" Margin="0,0,0,4">
-                            <Path Data="M12 5C7 5 3 9 3 9L5 11C5 11 8 8 12 8C16 8 19 11 19 11L21 9C21 9 17 5 12 5z M12 11C9.5 11 7.5 13 7.5 13L9.5 15C9.5 15 11 14 12 14C13 14 14.5 15 14.5 15L16.5 13C16.5 13 14.5 11 12 11z M12 17C11.45 17 11 17.45 11 18C11 18.55 11.45 19 12 19C12.55 19 13 18.55 13 18C13 17.45 12.55 17 12 17z"
-                                  Fill="{StaticResource TextPrimaryBrush}"
-                                  Stretch="Uniform"/>
-                        </Viewbox>
-                        <TextBlock Text="Wi-Fi" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- BLUETOOTH -->
-                <Border Width="96" Height="96"
-                        Background="{StaticResource GlassCardBrush}"
-                        CornerRadius="24"
-                        Margin="8"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource GlassBorderBrush}"
-                        MouseLeftButtonDown="Bluetooth_Click"
-                        Cursor="Hand">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="24" ShadowDepth="0" Color="#5FC9FF" Opacity="{Binding BluetoothGlowOpacity}"/>
-                    </Border.Effect>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Viewbox Width="36" Height="36" Margin="0,0,0,4">
-                            <Path Data="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm0 12.34v-3.76l1.88 1.88L13 18.17z"
-                                  Fill="{StaticResource TextPrimaryBrush}"
-                                  Stretch="Uniform"/>
-                        </Viewbox>
-                        <TextBlock Text="Bluetooth" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- USB -->
-                <Border Width="96" Height="96"
-                        Background="{StaticResource GlassCardBrush}"
-                        CornerRadius="24"
-                        Margin="8"
-                        BorderThickness="1"
-                        BorderBrush="{StaticResource GlassBorderBrush}"
-                        MouseLeftButtonDown="Usb_Click"
-                        Cursor="Hand">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="24" ShadowDepth="0" Color="#FFB74D" Opacity="{Binding UsbGlowOpacity}"/>
-                    </Border.Effect>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Viewbox Width="36" Height="36" Margin="0,0,0,4">
-                            <Path Data="M15 7v4h1v2h-3V9h-1V7H9v2H7V7H5v4H4v2h1v2h2v2h2v2h2v-2h2v-2h2v-2h1V9h-1V7h-2zm-4 10h2v2h-2v-2zm4 0h2v2h-2v-2z"
-                                  Fill="{StaticResource TextPrimaryBrush}"
-                                  Stretch="Uniform"/>
-                        </Viewbox>
-                        <TextBlock Text="USB" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-
-            <!-- CONTENT PANEL - glass -->
-            <Border Grid.Row="3"
-                    Background="{StaticResource GlassPanelBrush}"
-                    CornerRadius="20"
-                    Padding="20"
-                    BorderThickness="1"
-                    BorderBrush="{StaticResource GlassBorderBrush}">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.12" Color="Black"/>
-                </Border.Effect>
-
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <Grid>
-                        <!-- WIFI: QR + How to connect -->
-                        <StackPanel Visibility="{Binding WifiQrVisibility}">
-                            <TextBlock Text="Scan with Mobile App"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Margin="0,0,0,10"/>
-                            <Border Background="#30FFFFFF"
-                                    CornerRadius="14"
-                                    Padding="12"
-                                    BorderThickness="1"
-                                    BorderBrush="{StaticResource GlassBorderBrush}"
-                                    Margin="0,0,0,20">
-                                <Image Width="180" Height="180" Source="{Binding QrImage}"
-                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                       HorizontalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Text="{Binding ConnectionString}"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       FontSize="10" Opacity="0.9" TextAlignment="Center"
-                                       TextWrapping="Wrap" Margin="0,0,0,16"/>
-                            <TextBlock Text="HOW TO CONNECT"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentWifiBrush}"/>
-                                        <TextBlock Text="1" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Ensure your phone and PC are on the same Wi‑Fi network."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentWifiBrush}"/>
-                                        <TextBlock Text="2" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Download Sim Gamepad on your PC and open it."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentWifiBrush}"/>
-                                        <TextBlock Text="3" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Scan the QR code above with the Sim Gamepad mobile app."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentWifiBrush}"/>
-                                        <TextBlock Text="4" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Select your PC from the app to connect."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
+                <!-- Content Panels -->
+                <Grid Grid.Row="2" Margin="30,0,30,30">
+                    
+                    <!-- WI-FI & QR -->
+                    <Grid Visibility="{Binding WifiQrVisibility}" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- QR Card -->
+                        <Border Background="{StaticResource CardBrush}" CornerRadius="16" Padding="16" BorderThickness="1" BorderBrush="#20FFFFFF">
+                            <Image Width="250" Height="250" Source="{Binding QrImage}" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        
+                        <!-- Instructions -->
+                        <StackPanel Grid.Column="1" Margin="30,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="Scan to Connect" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,10"/>
+                            <TextBlock Text="{Binding ConnectionString}" Foreground="{StaticResource AccentBrush}" FontSize="12" Opacity="0.8" Margin="0,0,0,20" TextWrapping="Wrap"/>
+                            
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="1." FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Width="20"/>
+                                <TextBlock Text="Open SimGamepad App" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
-                        </StackPanel>
-
-                        <!-- BLUETOOTH: How to connect -->
-                        <StackPanel Visibility="{Binding BluetoothInfoVisibility}">
-                            <TextBlock Text="HOW TO CONNECT"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       FontSize="11" FontWeight="Bold" Margin="0,0,0,12"/>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentBluetoothBrush}"/>
-                                        <TextBlock Text="1" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Enable Bluetooth on both your phone and PC."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentBluetoothBrush}"/>
-                                        <TextBlock Text="2" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Download Sim Gamepad on your PC and open it."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentBluetoothBrush}"/>
-                                        <TextBlock Text="3" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Make your PC discoverable in Bluetooth settings."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentBluetoothBrush}"/>
-                                        <TextBlock Text="4" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Pair your phone with your PC."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentBluetoothBrush}"/>
-                                        <TextBlock Text="5" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Select your PC from the app to connect."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <!-- USB: How to connect -->
-                        <StackPanel Visibility="{Binding UsbInfoVisibility}">
-                            <TextBlock Text="HOW TO CONNECT"
-                                       Foreground="{StaticResource TextSecondaryBrush}"
-                                       FontSize="11" FontWeight="Bold" Margin="0,0,0,12"/>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentUsbBrush}"/>
-                                        <TextBlock Text="1" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Enable Developer options on your phone."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentUsbBrush}"/>
-                                        <TextBlock Text="2" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Enable USB debugging in Developer options."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentUsbBrush}"/>
-                                        <TextBlock Text="3" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Download Sim Gamepad on your PC and open it."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentUsbBrush}"/>
-                                        <TextBlock Text="4" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Connect your phone to your PC with a USB cable."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Grid Width="20" Height="20" Margin="0,0,10,0">
-                                        <Ellipse Fill="{StaticResource AccentUsbBrush}"/>
-                                        <TextBlock Text="5" Foreground="#1a1a1a" FontWeight="Bold" FontSize="11"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Grid>
-                                    <TextBlock Text="Allow USB debugging when prompted on your phone."
-                                               Foreground="{StaticResource TextPrimaryBrush}" FontSize="12"
-                                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="2." FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Width="20"/>
+                                <TextBlock Text="Scan this code" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-                </ScrollViewer>
-            </Border>
+
+                    <!-- BLUETOOTH INFO -->
+                    <Border Visibility="{Binding BluetoothInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF"> 
+                        <StackPanel>
+                            <TextBlock Text="Bluetooth Pairing" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,20"/>
+                            <TextBlock Text="1. Enable Bluetooth on PC &amp; Phone" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
+                            <TextBlock Text="2. Pair your devices in Windows Settings" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
+                            <TextBlock Text="3. Select PC in the Mobile App" Foreground="{StaticResource TextSecondary}" FontSize="16"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- USB INFO -->
+                    <Border Visibility="{Binding UsbInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF">
+                        <StackPanel>
+                            <TextBlock Text="USB Tethering" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,20"/>
+                            <TextBlock Text="1. Enable USB Debugging on Phone" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
+                            <TextBlock Text="2. Connect via USB Cable" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
+                            <TextBlock Text="3. Allow connection prompt on Phone" Foreground="{StaticResource TextSecondary}" FontSize="16"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                
+                <!-- Footer -->
+                <Grid Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20">
+                     <Button Content="Branco Venn™"
+                             Click="BrancoVenn_Click"
+                             FontSize="10"
+                             FontWeight="SemiBold"
+                             Foreground="{StaticResource TextSecondary}"
+                             Background="#10FFFFFF"
+                             BorderThickness="1"
+                             BorderBrush="Transparent"
+                             Padding="12,6"
+                             Cursor="Hand">
+                         <Button.Template>
+                             <ControlTemplate TargetType="Button">
+                                 <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                 </Border>
+                                 <ControlTemplate.Triggers>
+                                     <Trigger Property="IsMouseOver" Value="True">
+                                         <Setter TargetName="border" Property="Background" Value="#20FFFFFF"/>
+                                         <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                         <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                                     </Trigger>
+                                 </ControlTemplate.Triggers>
+                             </ControlTemplate>
+                         </Button.Template>
+                     </Button>
+                </Grid>
+                
+            </Grid>
         </Grid>
     </Border>
 </Window>

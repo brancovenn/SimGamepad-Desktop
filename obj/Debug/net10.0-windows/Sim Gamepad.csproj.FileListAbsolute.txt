@@ -24,3 +24,4 @@ D:\App Development Projects\Sim Gamepad WPF\Sim Gamepad\obj\Debug\net10.0-window
 D:\App Development Projects\Sim Gamepad WPF\Sim Gamepad\obj\Debug\net10.0-windows\Sim Gamepad.pdb
 D:\App Development Projects\Sim Gamepad WPF\Sim Gamepad\obj\Debug\net10.0-windows\Sim Gamepad.genruntimeconfig.cache
 D:\App Development Projects\Sim Gamepad WPF\Sim Gamepad\obj\Debug\net10.0-windows\ref\Sim Gamepad.dll
+D:\App Development Projects\Sim Gamepad WPF\Sim Gamepad\obj\Debug\net10.0-windows\Sim Gamepad.sourcelink.json
