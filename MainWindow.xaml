@@ -10,7 +10,8 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        Icon="/assets/icon.png">
 
     <Window.Resources>
         <!-- COLORS (DARK GLASS THEME) -->
