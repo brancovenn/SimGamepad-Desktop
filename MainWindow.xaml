@@ -209,7 +209,7 @@
                 <!-- Content Panels -->
                 <Grid Grid.Row="2" Margin="30,0,30,30">
                     
-                    <!-- WI-FI & QR -->
+                    <!-- WI-FI &amp; QR -->
                     <Grid Visibility="{Binding WifiQrVisibility}" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -223,68 +223,202 @@
                         
                         <!-- Instructions -->
                         <StackPanel Grid.Column="1" Margin="30,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="Scan to Connect" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,10"/>
-                            <TextBlock Text="{Binding ConnectionString}" Foreground="{StaticResource AccentBrush}" FontSize="12" Opacity="0.8" Margin="0,0,0,20" TextWrapping="Wrap"/>
+                            <TextBlock Text="Scan to Connect" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{Binding ConnectionString}" Foreground="{StaticResource AccentBrush}" FontSize="13" Opacity="0.9" Margin="0,0,0,24" TextWrapping="Wrap"/>
                             
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <TextBlock Text="1." FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Width="20"/>
-                                <TextBlock Text="Open SimGamepad App" Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="2." FontWeight="Bold" Foreground="{StaticResource AccentBrush}" Width="20"/>
-                                <TextBlock Text="Scan this code" Foreground="{StaticResource TextSecondary}"/>
-                            </StackPanel>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,14,0">
+                                    <TextBlock Text="1" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Open SimGamepad App" Foreground="#E0FFFFFF" FontSize="14" VerticalAlignment="Center"/>
+                            </Grid>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,14,0">
+                                    <TextBlock Text="2" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Scan this code" Foreground="#E0FFFFFF" FontSize="14" VerticalAlignment="Center"/>
+                            </Grid>
                         </StackPanel>
                     </Grid>
 
                     <!-- BLUETOOTH INFO -->
-                    <Border Visibility="{Binding BluetoothInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF"> 
+                    <Border Visibility="{Binding BluetoothInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="35,30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF"> 
                         <StackPanel>
-                            <TextBlock Text="Bluetooth Pairing" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,20"/>
-                            <TextBlock Text="1. Enable Bluetooth on PC &amp; Phone" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
-                            <TextBlock Text="2. Pair your devices in Windows Settings" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
-                            <TextBlock Text="3. Select PC in the Mobile App" Foreground="{StaticResource TextSecondary}" FontSize="16"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                <Border Width="40" Height="40" CornerRadius="12" Background="#1A00E5FF" Margin="0,0,16,0">
+                                    <Path Data="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71L13.41 12L17.71 7.71z M13 5.83 l1.88 1.88L13 9.59V5.83z M13 18.17v-3.76l1.88 1.88L13 18.17z" 
+                                          Fill="{StaticResource AccentBrush}" Width="20" Height="20" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="Bluetooth Pairing" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="1" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Enable Bluetooth on your PC &amp; Phone" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="2" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Pair your devices in Windows Settings" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="3" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Select your PC in the Mobile App" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
                         </StackPanel>
                     </Border>
 
                     <!-- USB INFO -->
-                    <Border Visibility="{Binding UsbInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF">
+                    <Border Visibility="{Binding UsbInfoVisibility}" Background="{StaticResource CardBrush}" CornerRadius="16" Padding="35,30" VerticalAlignment="Top" BorderThickness="1" BorderBrush="#20FFFFFF">
                         <StackPanel>
-                            <TextBlock Text="USB Tethering" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,20"/>
-                            <TextBlock Text="1. Enable USB Debugging on Phone" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
-                            <TextBlock Text="2. Connect via USB Cable" Foreground="{StaticResource TextSecondary}" FontSize="16" Margin="0,0,0,10"/>
-                            <TextBlock Text="3. Allow connection prompt on Phone" Foreground="{StaticResource TextSecondary}" FontSize="16"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                                <Border Width="40" Height="40" CornerRadius="12" Background="#1A00E5FF" Margin="0,0,16,0">
+                                    <Path Data="M6 2h8v5c0 1.1-.9 2-2 2h-4c-1.1 0-2-.9-2-2V2zM4 10h12c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V12c0-1.1.9-2 2-2z" 
+                                          Fill="{StaticResource AccentBrush}" Width="20" Height="20" Stretch="Uniform"/>
+                                </Border>
+                                <TextBlock Text="USB Tethering" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="1" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Enable USB Debugging on your Phone" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="2" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Connect your devices via USB Cable" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Width="28" Height="28" CornerRadius="14" Background="#1A00E5FF" BorderBrush="#4000E5FF" BorderThickness="1" Margin="0,0,16,0" VerticalAlignment="Top">
+                                    <TextBlock Text="3" Foreground="{StaticResource AccentBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="1" Text="Allow the connection prompt on Phone" Foreground="#E0FFFFFF" FontSize="15" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
                         </StackPanel>
                     </Border>
                 </Grid>
                 
-                <!-- Footer -->
+                <!-- Footer — Branco Venn Button (Modern Glow) -->
                 <Grid Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,20">
-                     <Button Content="Branco Venn™"
-                             Click="BrancoVenn_Click"
-                             FontSize="10"
-                             FontWeight="SemiBold"
-                             Foreground="{StaticResource TextSecondary}"
-                             Background="#10FFFFFF"
-                             BorderThickness="1"
-                             BorderBrush="Transparent"
-                             Padding="12,6"
-                             Cursor="Hand">
-                         <Button.Template>
-                             <ControlTemplate TargetType="Button">
-                                 <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                 </Border>
-                                 <ControlTemplate.Triggers>
-                                     <Trigger Property="IsMouseOver" Value="True">
-                                         <Setter TargetName="border" Property="Background" Value="#20FFFFFF"/>
-                                         <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-                                         <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
-                                     </Trigger>
-                                 </ControlTemplate.Triggers>
-                             </ControlTemplate>
-                         </Button.Template>
-                     </Button>
+                    <Button x:Name="BrancoVennBtn"
+                            Click="BrancoVenn_Click"
+                            Cursor="Hand"
+                            Padding="0"
+                            Background="Transparent"
+                            BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid x:Name="root" Background="Transparent">
+                                    
+                                    <!-- Base border -->
+                                    <Border CornerRadius="14" 
+                                            BorderThickness="1.5" 
+                                            BorderBrush="#30FFFFFF" 
+                                            Background="Transparent"/>
+                                    
+                                    <!-- Animated spiraling border -->
+                                    <Border x:Name="SpinningBorder" 
+                                            CornerRadius="14" 
+                                            BorderThickness="1.5" 
+                                            Background="Transparent" 
+                                            Opacity="0">
+                                        <Border.BorderBrush>
+                                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <RotateTransform x:Name="SpinTransform" CenterX="0.5" CenterY="0.5" Angle="0"/>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#00E5FF" Offset="0.0"/>
+                                                <GradientStop Color="Transparent" Offset="0.5"/>
+                                                <GradientStop Color="#00E5FF" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Border.BorderBrush>
+                                    </Border>
+
+                                    <!-- Label -->
+                                    <TextBlock x:Name="BtnLabel"
+                                               Text="Branco Venn&#x2122;"
+                                               FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#99FFFFFF"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Margin="16,8"
+                                               SnapsToDevicePixels="True"/>
+                                </Grid>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="SpinningBorder" Property="Opacity" Value="1"/>
+                                        <Setter TargetName="BtnLabel" Property="Foreground" Value="#FFFFFF"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="SpinningBorder" Property="Opacity" Value="0.6"/>
+                                        <Setter TargetName="BtnLabel" Property="Foreground" Value="#00E5FF"/>
+                                    </Trigger>
+                                    
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard x:Name="SpinStoryboard">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="SpinTransform"
+                                                                 Storyboard.TargetProperty="Angle"
+                                                                 From="0" To="360"
+                                                                 Duration="0:0:1.5"
+                                                                 RepeatBehavior="Forever"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <RemoveStoryboard BeginStoryboardName="SpinStoryboard"/>
+                                    </EventTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </Grid>
                 
             </Grid>
